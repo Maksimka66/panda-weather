@@ -1,0 +1,35 @@
+:root {
+  --primary: #4361ee;
+  --secondary: #3f37c9;
+  --dark: #1e1e24;
+  --light: #f8f9fa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: var(--dark);
+
+  font-family: 'Roboto', 'sans-serif';
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+  padding: 24px;
+  min-height: 100vh;
+}
+
+ul {
+  list-style-type: none;
+}
+
+img {
+  display: block;
+}
+
+@layer base {
+  body {
+    font-family: 'Roboto', 'sans-serif';
+  }
+}

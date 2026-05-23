@@ -1,0 +1,30 @@
+<template>
+  <div class="loading" v-if="weatherStore.isLoading">
+    <div class="loader"></div>
+    <span class="loader-text">Loading weather data...</span>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useWeatherStore } from '@/store/weatherStore'
+
+const weatherStore = useWeatherStore()
+</script>
+
+<style scoped>
+.loader {
+  margin: 0 auto;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 16px solid #ff6b08;
+  border-top-color: #18b432;
+  animation: test 0.8s linear infinite;
+}
+
+@keyframes test {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
