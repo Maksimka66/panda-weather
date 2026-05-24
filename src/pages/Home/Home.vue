@@ -1,58 +1,52 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
 import WeatherList from '@/components/WeatherList/WeatherList.vue'
-import SearchField from '@/components/SearchField/SearchField.vue'
-import WeatherChart from '@/components/WeatherChart/WeatherChart.vue'
 import Loader from '@/components/Loader/Loader.vue'
-import { useWeatherStore } from '@/store/weatherStore'
-import { fetchClientIp, getClientLocation } from '@/api/fetchClientIp'
-import { fetchWeather } from '@/api/api'
 import AddForecastButton from '@/components/AddForecastButton/AddForecastButton.vue'
+import { useInitialLocation } from '@/composables/useInitialLocation'
+import { useForecastView } from '@/composables/useForecastView'
+import { useWeatherStore } from '@/store/weatherStore'
 
 const weatherStore = useWeatherStore()
+const { setViewMode, setPeriodMode, getChartData } = useForecastView('locations')
 
-onMounted(async () => {
-  try {
-    weatherStore.setLoadingState(true)
-
-    const { ip } = await fetchClientIp()
-
-    const currentUserLocation = await getClientLocation(ip)
-
-    const currentLocationWeather = await fetchWeather(currentUserLocation.location.city)
-
-    const isSameData = weatherStore.locations.find((item) => item.id === currentLocationWeather.id)
-
-    if (!isSameData) {
-      weatherStore.addLocationWeather(currentLocationWeather)
-    }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    weatherStore.setLoadingState(false)
-  }
-})
+useInitialLocation()
 </script>
 
 <template>
   <div class="home" v-if="!weatherStore.isLoading">
     <div class="field-layout">
-      <SearchField />
       <AddForecastButton />
     </div>
-    <WeatherList :forecasts="weatherStore.locations" />
-    <WeatherChart />
+    <WeatherList
+      :forecasts="weatherStore.locations"
+      list-key="locations"
+      :favorite-ids="weatherStore.favoriteIds"
+      :get-chart-data="getChartData"
+      @change-view-mode="setViewMode"
+      @change-period-mode="setPeriodMode"
+    />
   </div>
-  <div v-else>
+  <div class="home-loading" v-else>
     <Loader />
   </div>
 </template>
 
 <style scoped>
+.home {
+  animation: fadeIn 0.4s var(--ease-out);
+}
+
 .field-layout {
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   display: flex;
+  justify-content: flex-end;
+}
+
+.home-loading {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  min-height: 320px;
 }
 </style>

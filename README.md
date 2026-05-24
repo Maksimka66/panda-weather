@@ -1,48 +1,44 @@
-# .
+# Panda Weather
 
-This template should help get you started developing with Vue 3 in Vite.
+Vue 3 weather dashboard powered by [OpenWeatherMap](https://openweathermap.org/).
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Current weather cards and up to **5** city blocks
+- **Geocoding autocomplete** when adding a city
+- **Day / 5-day (week)** forecast with hourly and daily Chart.js graphs
+- **Day / Night** display for the current day (night data from forecast)
+- **Favourites** tab with localStorage persistence (max 5)
+- Default city resolved by **IP geolocation**
+- **EN / UK** interface and API responses (`lang` parameter)
+- Custom confirm modals (no UI component libraries)
+- Responsive layout (container up to 1200px, mobile-friendly cards)
 
-## Recommended Browser Setup
+## Architecture
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+```
+src/
+  api/           HTTP clients (weather, geocoding, geo IP)
+  services/      Business orchestration
+  utils/mappers/ API → view models
+  store/         Pinia (weather, locale, confirm)
+  composables/   Reusable UI logic
+  components/    Presentational Vue components
+  pages/         Route views
+  i18n/          Translations
+```
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Setup
 
 ```sh
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+cp .env.example .env
+# Add VITE_OPENWEATHER_API_KEY and VITE_GEO_API_KEY
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+## Scripts
 
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- `npm run dev` — development server
+- `npm run build` — production build with type check
+- `npm run lint` — ESLint + oxlint

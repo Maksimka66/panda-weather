@@ -8,5 +8,7 @@
       "path": "./tsconfig.app.json"
     }
   ],
-  "types": ["vue-sweetalert2"]
+  "compilerOptions": {
+    "types": ["vue-sweetalert2"]
+  }
 }

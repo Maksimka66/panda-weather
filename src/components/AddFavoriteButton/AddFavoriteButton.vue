@@ -1,34 +1,27 @@
 <template>
-  <button class="favourite" @click="handleFavorite(cardId)"><FavoriteIcon /></button>
+  <button
+    class="favourite"
+    :class="{ active: isFavorite(cardId) }"
+    type="button"
+    :aria-label="isFavorite(cardId) ? 'Remove from favourites' : 'Add to favourites'"
+    @click="toggleFavorite(cardId)"
+  >
+    <FavoriteIcon />
+  </button>
 </template>
 
 <script setup lang="ts">
-import { useWeatherStore } from '@/store/weatherStore'
+import { useFavorite } from '@/composables/useFavorite'
 import FavoriteIcon from '../icons/FavoriteIcon.vue'
 
 defineProps({
   cardId: {
     type: Number,
-    required: true,
-    default: 0
+    required: true
   }
 })
 
-const weatherStore = useWeatherStore()
-
-const handleFavorite = (id) => {
-  const newFavoriteWeather = weatherStore.locations.find((item) => item.id === id)
-
-  if (newFavoriteWeather) {
-    const isSameFavorites = weatherStore.favorites.find((item) => item.id === id)
-
-    if (!isSameFavorites) {
-      weatherStore.addToFavorites(newFavoriteWeather)
-    } else {
-      weatherStore.removeWeather(isSameFavorites.id, 'favorites')
-    }
-  }
-}
+const { isFavorite, toggleFavorite } = useFavorite()
 </script>
 
 <style scoped>
@@ -36,8 +29,38 @@ const handleFavorite = (id) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
   border-radius: 50%;
   cursor: pointer;
+  border: 2px solid rgba(255, 107, 53, 0.25);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.favourite:hover {
+  transform: scale(1.1);
+  border-color: var(--favorite);
+  color: var(--favorite);
+  box-shadow: 0 4px 14px var(--favorite-glow);
+}
+
+.favourite.active {
+  border-color: var(--favorite);
+  background: linear-gradient(135deg, #ff6b35, #ff8fab);
+  color: #fff;
+  box-shadow: 0 4px 16px var(--favorite-glow);
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.favourite:active {
+  transform: scale(0.92);
 }
 </style>
