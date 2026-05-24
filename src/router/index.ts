@@ -8,16 +8,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Home
-      // children: [
-      //   {
-      //     path: 'profile',
-      //     component: ProfilePage
-      //   },
-      //   {
-      //     path: 'settings',
-      //     component: SettingsPage
-      //   }
-      // ]
     },
     {
       path: '/favorites',
