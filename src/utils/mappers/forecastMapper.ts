@@ -67,6 +67,10 @@ function buildNightSnapshot(items: OpenWeatherForecastResponse['list']): Weather
 
   const midItem = items[Math.floor(items.length / 2)]
 
+  if (!midItem) {
+    return null
+  }
+
   const base = mapItemToSnapshot(midItem)
 
   return {
@@ -82,7 +86,9 @@ export function mapForecastToCharts(
   locale: AppLocale
 ): ForecastChartData {
   const { list, city } = forecastData
+
   const timezone = city.timezone
+
   const todayKey = getLocalDateKey(Math.floor(Date.now() / 1000), timezone)
 
   const hourlyChart: ChartPoint[] = []
@@ -118,7 +124,10 @@ export function mapForecastToCharts(
     const key = getLocalDateKey(item.dt, timezone)
 
     if (!dayMap.has(key)) {
-      dayMap.set(key, { temps: [], items: [] })
+      dayMap.set(key, {
+        temps: [],
+        items: []
+      })
     }
 
     const entry = dayMap.get(key)!
